@@ -27,7 +27,7 @@ public class BrowserSetup extends BasePage {
 
             ChromeOptions options = new ChromeOptions();
             options.setExperimentalOption("prefs", prefs);
-            options.addArguments("--incognito");   // run in incognito
+            options.addArguments("--incognito");  
 
             driver = new ChromeDriver(options);
 

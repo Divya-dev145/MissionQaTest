@@ -25,7 +25,7 @@ public class Hook extends BasePage {
         try {
             if (driver != null) {
 
-                // TAKE SCREENSHOT ALWAYS (for debugging) – change to scenario.isFailed() later
+               
                 try {
                     TakesScreenshot ts = (TakesScreenshot) driver;
                     File src = ts.getScreenshotAs(OutputType.FILE);

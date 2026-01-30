@@ -1,10 +1,11 @@
 package mission;
 
 import io.cucumber.java.After;
-import io.cucumber.java.AfterStep; // Add this import
+
+import io.cucumber.java.AfterStep;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
-import io.qameta.allure.Allure;   // Add this import
+import io.qameta.allure.Allure;   
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -24,16 +25,15 @@ public class Hook extends BasePage {
         driver.get(LoadProp.getProperty("url"));
     }
 
-    // --- NEW: This captures a screenshot after EVERY step for Allure ---
+    
     @AfterStep("@ui")
     public void attachScreenshotAfterStep(Scenario scenario) {
         if (driver != null) {
             try {
-                // 1. Capture screenshot as byte array for Allure
+                
                 byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
                 
-                // 2. Attach to Allure report
-                // This makes the screenshot appear inside each step in the report
+               
                 InputStream screenshotStream = new ByteArrayInputStream(screenshot);
                 Allure.addAttachment("Step Screenshot", screenshotStream);
                 
@@ -47,7 +47,7 @@ public class Hook extends BasePage {
     public void tearDown(Scenario scenario) {
         try {
             if (driver != null) {
-                // Keep your existing local file saving logic
+                
                 try {
                     TakesScreenshot ts = (TakesScreenshot) driver;
                     File src = ts.getScreenshotAs(OutputType.FILE);

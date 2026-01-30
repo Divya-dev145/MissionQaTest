@@ -8,7 +8,7 @@ public class LoadProp extends BasePage {
 
     static Properties prop;
     static FileInputStream input;
-    // Using System.getProperty("user.dir") is safer for different environments
+   
     public static final String propFilePath = System.getProperty("user.dir") + "/src/test/java/TestData/TestData.properties";
 
     public static String getProperty(String key) {

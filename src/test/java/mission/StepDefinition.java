@@ -86,15 +86,14 @@ public class StepDefinition extends BasePage {
         homePage = new HomePage(driver);
         String itemName = table.asList().get(0);
         homePage.removeItem(itemName);
-        Thread.sleep(1000); // allow cart DOM to update
+        Thread.sleep(1000); 
     }
 
     @Given("I  should see {int} items in the cart page")
     public void i_should_see_items_in_the_cart_page(int expected) {
         int actual = driver.findElements(By.cssSelector(".cart_item")).size();
         System.out.println("Cart items after remove = " + actual);
-        // Uncomment if you want strict assertion:
-        // Assert.assertEquals(actual, expected, "Cart item count mismatch on cart page");
+        
     }
 
     @Given("I accept the change password popup if present")
@@ -122,14 +121,14 @@ public class StepDefinition extends BasePage {
                 ExpectedConditions.elementToBeClickable(By.id("checkout"))
         );
 
-        // Scroll into view and click via JS to bypass overlay/click issues
+        
         ((org.openqa.selenium.JavascriptExecutor) driver)
                 .executeScript("arguments[0].scrollIntoView(true);", checkoutBtn);
 
         ((org.openqa.selenium.JavascriptExecutor) driver)
                 .executeScript("arguments[0].click();", checkoutBtn);
 
-        // Now wait for navigation
+        
         wait.until(ExpectedConditions.urlContains("checkout-step-one.html"));
         System.out.println("After checkout click URL: " + driver.getCurrentUrl());
     }
@@ -161,20 +160,19 @@ public class StepDefinition extends BasePage {
         WebElement zipField = driver.findElement(By.id("postal-code"));
         org.openqa.selenium.JavascriptExecutor js = (org.openqa.selenium.JavascriptExecutor) driver;
 
-        // 1. Force the value into the box via JS
+        
         js.executeScript("arguments[0].value='" + zip + "';", zipField);
         
-        // 2. IMPORTANT: Click the field and send a 'Space' then 'Backspace'
-        // This triggers the website's internal listeners to recognize the text
+        
         zipField.click();
         zipField.sendKeys(org.openqa.selenium.Keys.SPACE);
         zipField.sendKeys(org.openqa.selenium.Keys.BACK_SPACE);
         
-        // 3. Alternative event trigger just in case
+        
         js.executeScript("arguments[0].dispatchEvent(new Event('change', { bubbles: true }));", zipField);
         
         System.out.println("ZIP code entered and validated: " + zip);
-        Thread.sleep(500); // Give the UI half a second to clear the error state
+        Thread.sleep(500); 
     }
 
     @When("I click on the CONTINUE button")
@@ -190,25 +188,25 @@ public class StepDefinition extends BasePage {
     public void item_total_will_be_equal_to_the_total_of_items_on_the_list() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-        // 1. Wait for checkout overview page
+        
         wait.until(ExpectedConditions.urlContains("checkout-step-two.html"));
 
-        // or wait for the subtotal label to be visible
+        
         WebElement subtotalLabel = wait.until(
                 ExpectedConditions.visibilityOfElementLocated(
                         By.cssSelector(".summary_subtotal_label")
                 )
         );
 
-        // 2. Sum item prices on this page
+        
         List<WebElement> prices = driver.findElements(By.cssSelector(".inventory_item_price"));
         double sum = 0.0;
         for (WebElement p : prices) {
             sum += Double.parseDouble(p.getText().replace("$", "").trim());
         }
 
-        // 3. Parse shown subtotal from the label we already waited for
-        String labelText = subtotalLabel.getText(); // e.g. "Item total: $39.98"
+       
+        String labelText = subtotalLabel.getText(); 
         double shownTotal = Double.parseDouble(
                 labelText.substring(labelText.indexOf("$") + 1)
         );
@@ -280,12 +278,12 @@ public class StepDefinition extends BasePage {
     public void the_products_should_be_displayed_in_ascending_price_order() {
         List<WebElement> priceElements = driver.findElements(By.className("inventory_item_price"));
         
-        // Extract prices as doubles
+        
         List<Double> actualPrices = priceElements.stream()
                 .map(e -> Double.parseDouble(e.getText().replace("$", "")))
                 .collect(Collectors.toList());
 
-        // Create a sorted version of the list
+        
         List<Double> sortedPrices = new ArrayList<>(actualPrices);
         Collections.sort(sortedPrices);
 
@@ -339,20 +337,18 @@ public class StepDefinition extends BasePage {
 
     @Then("response should contain the following data")
     public void response_should_contain_the_following_data(DataTable table) {
-        // Since it's a Scenario Outline, we check 201 Created
+        
         Assert.assertEquals(lastResponse.getStatusCode(), 201, "User not created");
 
         JsonPath json = lastResponse.jsonPath();
-        
-        // Note: We use the variables from the Scenario Outline directly
-        // because the DataTable in your feature file for this step is empty/header-only
+       
         Assert.assertNotNull(json.getString("name"), "Name is missing in response");
         Assert.assertNotNull(json.getString("job"), "Job is missing in response");
         Assert.assertNotNull(json.getString("id"), "ID was not generated");
         
         System.out.println("Created User ID: " + json.getString("id"));
     }
- // ================= NEW METHODS FOR PUT, PATCH, DELETE =================
+ // =================  METHODS FOR PUT, PATCH, DELETE =================
 
     @Given("I update user {int} with name {string} and job {string} using PUT")
     public void i_update_user_with_name_and_job_using_put(Integer id, String name, String job) {
@@ -372,7 +368,7 @@ public class StepDefinition extends BasePage {
     public void response_should_contain_the_updated_data(DataTable table) {
         Assert.assertNotNull(lastResponse, "Response was null");
         
-        // This line was failing because the table was empty
+        
         List<Map<String, String>> data = table.asMaps(String.class, String.class);
         Map<String, String> expected = data.get(0); 
 

@@ -9,7 +9,7 @@ import io.restassured.specification.RequestSpecification;
 public class ReqresClient {
 
     private static final String BASE_URL = "https://reqres.in/api";
-    // Directly updated with your provided key
+   
     private static final String API_KEY = "reqres_2a3e235444ff4c85b00fb22718e184b9"; 
 
     private static RequestSpecification getRequestSpec() {
@@ -31,8 +31,7 @@ public class ReqresClient {
 
     public static Response put(String endpoint, Object body) {
         return RestAssured.given()
-                .spec(getRequestSpec()) // This uses your API Key and Browser Headers
-                .body(body)
+                .spec(getRequestSpec())
                 .when()
                 .put(endpoint)
                 .then()
