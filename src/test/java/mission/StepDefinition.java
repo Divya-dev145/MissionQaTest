@@ -349,12 +349,13 @@ public class StepDefinition extends BasePage {
         System.out.println("Created User ID: " + json.getString("id"));
     }
  // =================  METHODS FOR PUT, PATCH, DELETE =================
-
     @Given("I update user {int} with name {string} and job {string} using PUT")
     public void i_update_user_with_name_and_job_using_put(Integer id, String name, String job) {
         Map<String, String> body = new HashMap<>();
         body.put("name", name);
         body.put("job", job);
+        
+        // Ensure this path results in /api/users/2
         lastResponse = ReqresClient.put("/users/" + id, body);
     }
 

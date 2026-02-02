@@ -31,7 +31,8 @@ public class ReqresClient {
 
     public static Response put(String endpoint, Object body) {
         return RestAssured.given()
-                .spec(getRequestSpec())
+                .spec(getRequestSpec()) // THIS IS CRITICAL: It carries your API Key and JSON Content-Type
+                .body(body)
                 .when()
                 .put(endpoint)
                 .then()
